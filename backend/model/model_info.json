@@ -1,0 +1,59 @@
+{
+  "architecture": "deep",
+  "input_features": [
+    "Chiral indice n",
+    "Chiral indice m",
+    "Initial atomic coordinate u",
+    "Initial atomic coordinate v",
+    "Initial atomic coordinate w"
+  ],
+  "output_features": [
+    "Calculated atomic coordinates u'",
+    "Calculated atomic coordinates v'",
+    "Calculated atomic coordinates w'"
+  ],
+  "input_dim": 5,
+  "output_dim": 3,
+  "total_parameters": 128515,
+  "dataset_size": 10721,
+  "training_samples": 8577,
+  "validation_samples": 1071,
+  "test_samples": 1073,
+  "training_time_seconds": 77.13723468780518,
+  "epochs_trained": 177,
+  "test_metrics": {
+    "overall": {
+      "rmse": 0.013043653293760258,
+      "mae": 0.008192301303853379,
+      "r2": 0.997940350590028
+    },
+    "per_coordinate": {
+      "u_prime": {
+        "rmse": 0.009123834183084014,
+        "mae": 0.007012353971138916,
+        "r2": 0.9990317378770134
+      },
+      "v_prime": {
+        "rmse": 0.009507803162607345,
+        "mae": 0.007123194164456325,
+        "r2": 0.9989010979480888
+      },
+      "w_prime": {
+        "rmse": 0.018351239810001096,
+        "mae": 0.010441355775964896,
+        "r2": 0.9958882159449818
+      }
+    },
+    "displacement": {
+      "r2": -0.847116098112429,
+      "mae": 0.01270856988973112
+    }
+  },
+  "validation_metrics": {
+    "overall": {
+      "rmse": 0.015446777393997604,
+      "mae": 0.008261665757081864,
+      "r2": 0.9971455346334461
+    }
+  }
+}
