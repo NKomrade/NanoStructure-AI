@@ -99,11 +99,11 @@ const CNTViewer: React.FC<CNTViewerProps> = ({ prediction }) => {
           
           <div className="space-y-1.5 text-xs">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-cyan-400 flex-shrink-0"></div>
+          <div className="w-3 h-3 rounded-full bg-orange-500 flex-shrink-0"></div>
           <span className="text-gray-300">Initial Position</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-orange-500 flex-shrink-0"></div>
+          <div className="w-3 h-3 rounded-full bg-cyan-400 flex-shrink-0"></div>
           <span className="text-gray-300">Calculated Position</span>
         </div>
         <div className="flex items-center gap-2">
