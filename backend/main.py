@@ -55,13 +55,13 @@ app = FastAPI(
 )
 
 # --- CORS Configuration ---
-# Allow requests from your Next.js frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://nano-structure-ai.vercel.app","http://localhost:3000"],
+    allow_origins=["https://nano-structure-ai.vercel.app", "http://localhost:3000"],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 # --- Model Loading Function ---
@@ -138,8 +138,7 @@ async def predict_coordinates(data: CNTInput):
         if not (-10 <= data.n <= 10) or not (-10 <= data.m <= 10):
             return JSONResponse(
                 status_code=400,
-                content={"error": "Chiral indices must be between -10 and 10"},
-                headers={"Access-Control-Allow-Origin": "http://localhost:3000"}
+                content={"error": "Chiral indices must be between -10 and 10"}
             )
 
         if not all([model, scaler_X, scaler_y]):
@@ -149,8 +148,7 @@ async def predict_coordinates(data: CNTInput):
                         f"scaler_y={scaler_y is not None}")
             return JSONResponse(
                 status_code=503,
-                content={"error": "Model components not loaded. Please check server logs."},
-                headers={"Access-Control-Allow-Origin": "http://localhost:3000"}
+                content={"error": "Model components not loaded. Please check server logs."}
             )
 
         # Log input data for debugging
@@ -187,17 +185,13 @@ async def predict_coordinates(data: CNTInput):
         }
         
         logger.info(f"Successful prediction: {result}")
-        return JSONResponse(
-            content=result,
-            headers={"Access-Control-Allow-Origin": "http://localhost:3000"}
-        )
+        return JSONResponse(content=result)
 
     except Exception as e:
         logger.exception("Prediction error")
         return JSONResponse(
             status_code=500,
-            content={"error": f"Prediction failed: {str(e)}"},
-            headers={"Access-Control-Allow-Origin": "http://localhost:3000"}
+            content={"error": f"Prediction failed: {str(e)}"}
         )
 
 @app.get("/debug")
