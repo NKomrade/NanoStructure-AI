@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://nanostructure-ai-backend.onrender.com';
 
 export interface ModelInfo {
   architecture: string;
@@ -15,17 +15,47 @@ export interface ModelInfo {
 }
 
 export const getModelInfo = async (): Promise<ModelInfo> => {
-  const response = await fetch(`${API_BASE_URL}/model-info`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch model information');
+  try {
+    const response = await fetch(`${API_BASE_URL}/model-info`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Failed to fetch model information: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Model info fetch error:', error);
+    throw error;
   }
-  return response.json();
 };
 
 export const checkModelStatus = async () => {
-  const response = await fetch(`${API_BASE_URL}/status`);
-  if (!response.ok) {
-    throw new Error('Failed to check model status');
+  try {
+    const response = await fetch(`${API_BASE_URL}/status`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Failed to check model status: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Model status check error:', error);
+    throw error;
   }
-  return response.json();
 };
