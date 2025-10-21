@@ -2,9 +2,8 @@ import numpy as np
 import tensorflow as tf
 import pickle
 from fastapi import FastAPI, HTTPException
-import sys
-from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import os
 import logging
@@ -55,12 +54,18 @@ app = FastAPI(
 )
 
 # --- CORS Configuration ---
+origins = [
+    "https://nano-structure-ai.vercel.app",
+    "http://localhost:3000",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://nano-structure-ai.vercel.app", "http://localhost:3000"],
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
+    max_age=3600,
     expose_headers=["*"]
 )
 
