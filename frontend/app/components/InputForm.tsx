@@ -10,16 +10,6 @@ interface InputFormProps {
   apiStatus: ApiStatus | null;
 }
 
-const validateInputs = (n: number, m: number) => {
-  const errors: string[] = [];
-  
-  if (m > n) errors.push("m must be ≤ n for valid chiral vectors");
-  if (n < 1 || n > 20) errors.push("n should be between 1-20");
-  if (m < 0 || m > 20) errors.push("m should be between 0-20");
-  
-  return errors;
-};
-
 const presets = [
   { name: "Armchair (5,5)", n: 5, m: 5 },
   { name: "Zigzag (10,0)", n: 10, m: 0 },

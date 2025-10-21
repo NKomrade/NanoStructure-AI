@@ -20,7 +20,6 @@ export async function makePrediction(input: PredictionInput, maxRetries = 3) {
           'Accept': 'application/json',
         },
         mode: 'cors',
-        credentials: 'include',
         body: JSON.stringify(input),
       });
 
@@ -45,7 +44,6 @@ export async function makePrediction(input: PredictionInput, maxRetries = 3) {
 export const getApiStatus = async () => {
   const response = await fetch(`${API_URL}/status`, {
     mode: 'cors',
-    credentials: 'include',
     headers: {
       'Accept': 'application/json',
     },

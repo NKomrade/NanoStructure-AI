@@ -22,7 +22,6 @@ export const getModelInfo = async (): Promise<ModelInfo> => {
         'Accept': 'application/json',
       },
       mode: 'cors',
-      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -45,7 +44,6 @@ export const checkModelStatus = async () => {
         'Accept': 'application/json',
       },
       mode: 'cors',
-      credentials: 'include',
     });
 
     if (!response.ok) {
