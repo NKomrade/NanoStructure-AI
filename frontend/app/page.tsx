@@ -68,11 +68,10 @@ export default function Home() {
       ) : (
         <p>
           Model components are not loaded. Please check if model files exist on the server.
-          Missing components: {status?.components && 
-            Object.entries(status.components)
-              .filter(([name, loaded]) => !loaded)
-              .map(([name]) => name)
-              .join(', ')}
+          {status?.components && Object.entries(status.components)
+            .filter(([_, loaded]) => !loaded)
+            .map(([name]) => name)
+            .join(', ')}
         </p>
       )}
     </div>
@@ -90,7 +89,7 @@ export default function Home() {
           </p>
         </header>
 
-        {(error || status?.status === 'not_ready') && <ApiErrorMessage />}
+        {(error || (status && status.status === 'not_ready')) && <ApiErrorMessage />}
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
           <div className="bg-gray-800/90 p-6 rounded-xl shadow-lg backdrop-blur-sm">
@@ -100,7 +99,7 @@ export default function Home() {
             <InputForm
               setPrediction={setPrediction}
               setLoading={setLoading}
-              apiStatus={status}
+              apiStatus={status || { status: 'not_ready' }}
             />
             {prediction?.result && <ResultsPanel result={prediction.result} />}
           </div>

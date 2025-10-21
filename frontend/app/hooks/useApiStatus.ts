@@ -1,13 +1,5 @@
 import { useState, useEffect } from 'react';
-
-interface ApiStatus {
-  status: 'ready' | 'not_ready';
-  components: {
-    model: boolean;
-    scaler_X: boolean;
-    scaler_y: boolean;
-  };
-}
+import { ApiStatus } from '../page';
 
 export function useApiStatus() {
   const [status, setStatus] = useState<ApiStatus | null>(null);
@@ -16,16 +8,18 @@ export function useApiStatus() {
   useEffect(() => {
     const checkStatus = async () => {
       try {
-        const response = await fetch('http://localhost:8000/status');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/status`);
         const data = await response.json();
         setStatus(data);
-      } catch (error: unknown) {
-        setError(error instanceof Error ? error.message : 'Unable to connect to API');
+        setError(null);
+      } catch (err) {
+        setError('Failed to connect to API');
+        console.error('API Status Error:', err);
       }
     };
 
     checkStatus();
-    const interval = setInterval(checkStatus, 5000); // Check every 5 seconds
+    const interval = setInterval(checkStatus, 5000);
     return () => clearInterval(interval);
   }, []);
 

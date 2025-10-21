@@ -38,3 +38,8 @@ export async function makePrediction(input: PredictionInput, maxRetries = 3) {
   
   throw lastError || new Error('Failed to connect to the server');
 }
+
+export const getApiStatus = async () => {
+  const response = await fetch(`${API_URL}/status`);
+  return response.json();
+};

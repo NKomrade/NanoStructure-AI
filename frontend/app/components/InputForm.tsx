@@ -43,23 +43,12 @@ const InputForm: React.FC<InputFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isApiReady) {
-      setError("API is not ready. Please wait for the model to load.");
-      return;
-    }
-
-    const validationErrors = validateInputs(n, m);
-    if (validationErrors.length > 0) {
-      setError(validationErrors.join(", "));
-      return;
-    }
-
-    setError("");
-    setLoading(true);
-    setPrediction(null);
-
+    
+    // Replace localhost URL with environment variable
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://nanostructure-ai-backend.onrender.com';
+    
     try {
-      const response = await fetch("http://127.0.0.1:8000/predict", {
+      const response = await fetch(`${API_URL}/predict`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
