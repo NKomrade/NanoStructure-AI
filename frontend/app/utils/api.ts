@@ -27,8 +27,8 @@ export async function makePrediction(input: PredictionInput, maxRetries = 3) {
       }
 
       return await response.json();
-    } catch (error: any) {
-      lastError = error;
+    } catch (error: unknown) {
+      lastError = error instanceof Error ? error : new Error('Unknown error occurred');
       console.error(`Attempt ${attempt + 1} failed:`, error);
       if (attempt < maxRetries - 1) {
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -36,5 +36,5 @@ export async function makePrediction(input: PredictionInput, maxRetries = 3) {
     }
   }
   
-  throw new Error(lastError?.message || 'Failed to connect to the server');
+  throw lastError || new Error('Failed to connect to the server');
 }

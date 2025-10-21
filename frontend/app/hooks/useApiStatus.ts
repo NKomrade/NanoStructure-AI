@@ -19,8 +19,8 @@ export function useApiStatus() {
         const response = await fetch('http://localhost:8000/status');
         const data = await response.json();
         setStatus(data);
-      } catch (err) {
-        setError('Unable to connect to API');
+      } catch (error: unknown) {
+        setError(error instanceof Error ? error.message : 'Unable to connect to API');
       }
     };
 

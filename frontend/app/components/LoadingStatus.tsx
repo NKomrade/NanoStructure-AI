@@ -1,7 +1,12 @@
 import React from 'react';
 
+interface ApiStatus {
+  status: 'ready' | 'not_ready';
+  components?: Record<string, boolean>;
+}
+
 interface LoadingStatusProps {
-  apiStatus: any;
+  apiStatus: ApiStatus | null;
 }
 
 const LoadingStatus: React.FC<LoadingStatusProps> = ({ apiStatus }) => {

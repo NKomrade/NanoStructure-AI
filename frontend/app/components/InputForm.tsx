@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Prediction } from "../page";
+import { Prediction, ApiStatus } from "../page";
 import LoadingStatus from "./LoadingStatus";
-import { makePrediction } from '../utils/api';
 
 interface InputFormProps {
   setPrediction: (prediction: Prediction | null) => void;
   setLoading: (loading: boolean) => void;
-  apiStatus: any;  // Add API status prop
+  apiStatus: ApiStatus | null;
 }
 
 const validateInputs = (n: number, m: number) => {
@@ -79,9 +78,9 @@ const InputForm: React.FC<InputFormProps> = ({
       }
 
       setPrediction(data);
-    } catch (err: any) {
+    } catch (err: Error | unknown) {
       console.error("Prediction error:", err);
-      setError(err.message || "Failed to get prediction. Please try again.");
+      setError(err instanceof Error ? err.message : "Failed to get prediction. Please try again.");
     } finally {
       setLoading(false);
     }

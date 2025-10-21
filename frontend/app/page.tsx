@@ -20,6 +20,11 @@ export interface Prediction {
   result?: PredictionResult;
 }
 
+export interface ApiStatus {
+  status: 'ready' | 'not_ready';
+  components?: Record<string, boolean>;
+}
+
 const ResultsPanel = ({ result }: { result: PredictionResult | null }) => {
   if (!result) return null;
 
@@ -31,9 +36,9 @@ const ResultsPanel = ({ result }: { result: PredictionResult | null }) => {
         <div>
           <h4 className="text-white font-semibold">Optimized Coordinates</h4>
           <div className="text-gray-300">
-            <p>u': {result.u_prime.toFixed(6)}</p>
-            <p>v': {result.v_prime.toFixed(6)}</p>
-            <p>w': {result.w_prime.toFixed(6)}</p>
+            <p>u&apos;: {result.u_prime.toFixed(6)}</p>
+            <p>v&apos;: {result.v_prime.toFixed(6)}</p>
+            <p>w&apos;: {result.w_prime.toFixed(6)}</p>
           </div>
         </div>
         
@@ -65,7 +70,7 @@ export default function Home() {
           Model components are not loaded. Please check if model files exist on the server.
           Missing components: {status?.components && 
             Object.entries(status.components)
-              .filter(([_, loaded]) => !loaded)
+              .filter(([name, loaded]) => !loaded)
               .map(([name]) => name)
               .join(', ')}
         </p>
