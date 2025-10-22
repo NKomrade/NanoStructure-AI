@@ -9,6 +9,10 @@ interface PredictionInput {
 }
 
 export async function makePrediction(input: PredictionInput) {
+  if (!API_URL) {
+    throw new Error('API URL is not configured');
+  }
+
   try {
     const response = await fetch(`${API_URL}/predict`, {
       method: 'POST',
@@ -21,7 +25,8 @@ export async function makePrediction(input: PredictionInput) {
     });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.error || `HTTP error! status: ${response.status}`);
     }
 
     return await response.json();
@@ -32,12 +37,25 @@ export async function makePrediction(input: PredictionInput) {
 }
 
 export const getApiStatus = async () => {
+  if (!API_URL) {
+    throw new Error('API URL is not configured');
+  }
+
   try {
     const response = await fetch(`${API_URL}/status`, {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       mode: 'cors',
       credentials: 'omit',
     });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      throw new Error(errorData?.error || `HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
     console.error('API Status error:', error);
