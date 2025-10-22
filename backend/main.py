@@ -9,6 +9,7 @@ import os
 import logging
 import time
 import json
+from dotenv import load_dotenv
 
 # Set up logging with more detail
 logging.basicConfig(
@@ -16,6 +17,16 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Load environment variables
+load_dotenv()
+
+# Get environment variables
+PORT = int(os.getenv('PORT', 8000))
+CORS_ORIGINS = os.getenv('CORS_ORIGINS', '').split(',')
+MODEL_PATH = os.getenv('MODEL_PATH', 'model/cnt_predictor_model.keras')
+SCALER_X_PATH = os.getenv('SCALER_X_PATH', 'model/scaler_X.pkl')
+SCALER_Y_PATH = os.getenv('SCALER_Y_PATH', 'model/scaler_y.pkl')
 
 # Get absolute path for model directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -62,10 +73,10 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=False,  # Changed from True to False
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=CORS_ORIGINS,
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 # --- Model Loading Function ---

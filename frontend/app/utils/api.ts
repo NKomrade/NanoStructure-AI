@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://nanostructure-ai-backend.onrender.com';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface PredictionInput {
   n: number;
@@ -8,45 +8,39 @@ interface PredictionInput {
   w: number;
 }
 
-export async function makePrediction(input: PredictionInput, maxRetries = 3) {
-  let lastError;
-  
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(`${API_URL}/predict`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        mode: 'cors',
-        credentials: 'omit', // Changed from 'include' to 'omit'
-        body: JSON.stringify(input),
-      });
+export async function makePrediction(input: PredictionInput) {
+  try {
+    const response = await fetch(`${API_URL}/predict`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'omit',
+      body: JSON.stringify(input),
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Server error: ${response.status}`);
-      }
-
-      return await response.json();
-    } catch (error: unknown) {
-      lastError = error instanceof Error ? error : new Error('Unknown error occurred');
-      console.error(`Attempt ${attempt + 1} failed:`, error);
-      if (attempt < maxRetries - 1) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Prediction error:', error);
+    throw error;
   }
-  
-  throw lastError || new Error('Failed to connect to the server');
 }
 
 export const getApiStatus = async () => {
-  const response = await fetch(`${API_URL}/status`, {
-    mode: 'cors',
-    headers: {
-      'Accept': 'application/json',
-    },
-  });
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/status`, {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'omit',
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('API Status error:', error);
+    throw error;
+  }
 };
