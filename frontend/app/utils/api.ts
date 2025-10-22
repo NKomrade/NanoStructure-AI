@@ -18,6 +18,7 @@ export async function makePrediction(input: PredictionInput, maxRetries = 3) {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Origin': 'https://nano-structure-ai.vercel.app'
         },
         mode: 'cors',
         body: JSON.stringify(input),

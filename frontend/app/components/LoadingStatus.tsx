@@ -22,7 +22,7 @@ const LoadingStatus: React.FC<LoadingStatusProps> = ({ apiStatus }) => {
       <div>
         <p className="mb-2">Model files not found. Please ensure the following files exist in the backend/model directory:</p>
         <ul className="list-disc list-inside text-xs space-y-1">
-          <li>best_cnt_model.h5</li>
+          <li>cnt_predictor_model.keras</li>
           <li>scaler_X.pkl</li>
           <li>scaler_y.pkl</li>
         </ul>
