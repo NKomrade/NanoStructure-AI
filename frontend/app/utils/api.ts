@@ -17,10 +17,9 @@ export async function makePrediction(input: PredictionInput, maxRetries = 3) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Origin': 'https://nano-structure-ai.vercel.app'
         },
         mode: 'cors',
+        credentials: 'omit', // Changed from 'include' to 'omit'
         body: JSON.stringify(input),
       });
 

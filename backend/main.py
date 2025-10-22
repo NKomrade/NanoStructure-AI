@@ -57,16 +57,15 @@ app = FastAPI(
 origins = [
     "https://nano-structure-ai.vercel.app",
     "http://localhost:3000",
+    "*"  # Temporarily allow all origins for testing
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
-    allow_headers=["Content-Type", "Accept", "Origin"],
-    expose_headers=["*"],
-    max_age=3600
+    allow_credentials=False,  # Changed from True to False
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # --- Model Loading Function ---
