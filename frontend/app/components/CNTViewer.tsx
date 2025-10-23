@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Sphere, Line, Html, PerspectiveCamera, Grid } from '@react-three/drei';
+import { OrbitControls, Sphere, Line, Text, PerspectiveCamera, Grid } from '@react-three/drei';
 import { useState } from 'react';
 
 interface Prediction {
@@ -26,18 +26,17 @@ const CoordinateLabel = ({ position, label, color, offset = [0, 0.3, 0] }: {
   ];
   
   return (
-    <Html position={adjustedPosition} center>
-      <div 
-        className="pointer-events-none px-2 py-1 rounded text-xs font-medium shadow-lg backdrop-blur-sm whitespace-nowrap"
-        style={{ 
-          backgroundColor: `${color}15`,
-          border: `1px solid ${color}60`,
-          color: color
-        }}
-      >
-        {label}
-      </div>
-    </Html>
+    <Text
+      position={adjustedPosition}
+      fontSize={0.12}
+      color={color}
+      anchorX="center"
+      anchorY="middle"
+      outlineWidth={0.01}
+      outlineColor="#000000"
+    >
+      {label}
+    </Text>
   );
 };
 
