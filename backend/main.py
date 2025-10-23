@@ -102,7 +102,24 @@ def load_ml_components(max_retries=3, retry_delay=2):
     return None, None, None
 
 # --- Load Models and Scalers at Startup ---
-model, scaler_X, scaler_y = load_ml_components()
+model, scaler_X, scaler_y = None, None, None
+
+@app.on_event("startup")
+async def startup_event():
+    """Load models on startup in background"""
+    global model, scaler_X, scaler_y
+    logger.info("=" * 50)
+    logger.info("Starting CNT Predictor API...")
+    logger.info(f"Model directory: {MODEL_DIR}")
+    logger.info("=" * 50)
+    
+    # Load components (this may take time on free tier)
+    model, scaler_X, scaler_y = load_ml_components()
+    
+    if all([model, scaler_X, scaler_y]):
+        logger.info("✓ All ML components loaded successfully")
+    else:
+        logger.error("✗ Failed to load some components")
 
 # --- API Endpoints ---
 @app.get("/")
