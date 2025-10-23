@@ -64,22 +64,19 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# --- CORS Configuration ---
+# --- CORS Middleware Setup ---
 origins = [
-    "https://nano-structure-ai.vercel.app",
-    "https://nanostructure-ai-backend.onrender.com",
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://127.0.0.1:3000",
-    "http://127.0.0.1:5173",
+    "https://nano-structure-ai.vercel.app",   # your frontend domain
+    "https://nanostructure-ai-backend.onrender.com",  # backend itself
+    "http://localhost:3000",  # local dev
+    "http://127.0.0.1:3000"
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins temporarily to test
+    allow_origins=origins,  # specify allowed origins
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
