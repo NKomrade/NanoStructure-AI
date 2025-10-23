@@ -137,6 +137,8 @@ async def predict_coordinates(data: CNTInput):
     and initial coordinates.
     """
     try:
+        logger.info(f"Received data: {data.dict()}")
+        
         # Enhanced input validation
         if data.m > data.n:
             raise HTTPException(
@@ -159,9 +161,6 @@ async def predict_coordinates(data: CNTInput):
                 status_code=503,
                 content={"error": "Model components not loaded. Please check server logs."}
             )
-
-        # Log input data for debugging
-        logger.info(f"Received prediction request with data: {data.dict()}")
 
         input_data = np.array([[data.n, data.m, data.u, data.v, data.w]])
         logger.info(f"Input array shape: {input_data.shape}")
@@ -197,7 +196,9 @@ async def predict_coordinates(data: CNTInput):
         return JSONResponse(content=result)
 
     except Exception as e:
-        logger.exception("Prediction error")
+        import traceback
+        logger.error("Error in /predict: " + str(e))
+        logger.error(traceback.format_exc())
         return JSONResponse(
             status_code=500,
             content={"error": f"Prediction failed: {str(e)}"}
