@@ -33,8 +33,9 @@ const InputForm: React.FC<InputFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
     
-    // Replace localhost URL with environment variable
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://nanostructure-ai-backend.onrender.com';
     
     try {
@@ -43,14 +44,19 @@ const InputForm: React.FC<InputFormProps> = ({
         headers: {
           "Content-Type": "application/json",
         },
+        mode: "cors",
         body: JSON.stringify({ n, m, u, v, w }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        if (response.status === 502) {
+          throw new Error("Server is starting up or temporarily unavailable. Please try again in a moment.");
+        }
+        const data = await response.json().catch(() => ({ error: `Server error: ${response.status}` }));
         throw new Error(data.error || `Server error: ${response.status}`);
       }
+
+      const data = await response.json();
 
       if (!data.calculated || !data.initial) {
         throw new Error("Invalid response format from server");

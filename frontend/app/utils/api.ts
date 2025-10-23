@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://nanostructure-ai-backend.onrender.com';
 
 interface PredictionInput {
   n: number;
@@ -9,10 +9,6 @@ interface PredictionInput {
 }
 
 export async function makePrediction(input: PredictionInput) {
-  if (!API_URL) {
-    throw new Error('API URL is not configured');
-  }
-
   try {
     const response = await fetch(`${API_URL}/predict`, {
       method: 'POST',
@@ -20,11 +16,13 @@ export async function makePrediction(input: PredictionInput) {
         'Content-Type': 'application/json',
       },
       mode: 'cors',
-      credentials: 'omit',
       body: JSON.stringify(input),
     });
 
     if (!response.ok) {
+      if (response.status === 502) {
+        throw new Error("Server is starting up. Please wait a moment and try again.");
+      }
       const errorData = await response.json().catch(() => null);
       throw new Error(errorData?.error || `HTTP error! status: ${response.status}`);
     }
@@ -37,10 +35,6 @@ export async function makePrediction(input: PredictionInput) {
 }
 
 export const getApiStatus = async () => {
-  if (!API_URL) {
-    throw new Error('API URL is not configured');
-  }
-
   try {
     const response = await fetch(`${API_URL}/status`, {
       method: 'GET',
@@ -48,7 +42,6 @@ export const getApiStatus = async () => {
         'Content-Type': 'application/json',
       },
       mode: 'cors',
-      credentials: 'omit',
     });
 
     if (!response.ok) {
