@@ -9,6 +9,7 @@ import os
 import logging
 import time
 import json
+import sys
 from dotenv import load_dotenv
 
 # Set up logging with more detail
@@ -29,8 +30,7 @@ SCALER_X_PATH = os.getenv('SCALER_X_PATH', 'model/scaler_X.pkl')
 SCALER_Y_PATH = os.getenv('SCALER_Y_PATH', 'model/scaler_y.pkl')
 
 # Get absolute path for model directory
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_DIR = os.path.join(BASE_DIR, 'model')
+MODEL_DIR = os.path.join(os.path.dirname(__file__), 'model')
 MODEL_INFO_PATH = os.path.join(MODEL_DIR, 'model_info.json')
 
 def initialize_model_directory():
@@ -77,9 +77,9 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Allow all origins temporarily to test
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
 )
 
